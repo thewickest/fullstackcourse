@@ -5,8 +5,11 @@ const Title = ({name}) => (
   <h1>{name}</h1>
 )
 
-const Statistics = (props) => (
-  <p>{props.name} {props.value}</p>
+const Statistics = ({name,value}) => (
+  <tr>
+    <td>{name}</td><td>{value}</td>
+  </tr>
+    
 )
 
 const Button = ({handleClick,name}) => (
@@ -28,12 +31,14 @@ const App = () => {
       <Button handleClick={()=>setNeutral(neutral+1)} name="neutral"/>
       <Button handleClick={()=>setBad(bad+1)} name="bad"/>
       <Title name="statistics"/>
-      <Statistics name="good" value={good}/>
-      <Statistics name="neutral" value={neutral}/>
-      <Statistics name="bad" value={bad}/>
-      <Statistics name="all" value={good+neutral+bad}/>
-      <Statistics name="average" value={(good-bad)/(good+neutral+bad)}/>
-      <Statistics name="positive" value={(good/(good+neutral+bad))*100+'%'}/>
+      <table>
+        <Statistics name="good" value={good}/>
+        <Statistics name="neutral" value={neutral}/>
+        <Statistics name="bad" value={bad}/>
+        <Statistics name="all" value={good+neutral+bad}/>
+        <Statistics name="average" value={(good-bad)/(good+neutral+bad)}/>
+        <Statistics name="positive" value={(good/(good+neutral+bad))*100+'%'}/>
+      </table>      
     </div>
   )
 }
