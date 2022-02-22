@@ -1,17 +1,31 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Button = ({handleClick,name}) => (
+  <button onClick={handleClick}>{name}</button>
+)
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(6).fill(0))
+  console.log(votes)
 
   const getRandom = () => {
     setSelected(Math.floor(Math.random()*6))
   }
 
+  const vote = (s) => {
+    const arr = [...votes]
+    arr[s] += 1
+    setVotes(arr)
+  }
+
   return (
     <div>
       <p>{props.anecdotes[selected]}</p>
-      <button onClick={getRandom}>next anecdote</button>
+      <p>has {votes[selected]} votes</p>
+      <Button handleClick={getRandom} name="next anecdote"/>
+      <Button handleClick={() => vote(selected)} name="vote"/>
     </div>
   )
 }
