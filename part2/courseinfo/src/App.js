@@ -2,10 +2,7 @@ const Header = ({ course }) => <h1>{course}</h1>
 
 const Total = ({ sum }) => <b>total of {sum} exercises</b>
 
-const Part = ({ part }) =>
-    <p>
-        {part.name} {part.exercises}
-    </p>
+const Part = ({ part }) => <p>{part.name} {part.exercises}</p>
 
 const Content = ({ parts }) =>
     <>
@@ -21,34 +18,56 @@ const Course = ({course}) => (
 )
 
 const App = () => {
-    const course = {
-        id: 1,
-        name: 'Half Stack application development',
-        parts: [
+    const courses = [
+        {
+          name: 'Half Stack application development',
+          id: 1,
+          parts: [
             {
-                name: 'Fundamentals of React',
-                exercises: 10,
-                id: 1
+              name: 'Fundamentals of React',
+              exercises: 10,
+              id: 1
             },
             {
-                name: 'Using props to pass data',
-                exercises: 7,
-                id: 2
+              name: 'Using props to pass data',
+              exercises: 7,
+              id: 2
             },
             {
-                name: 'State of a component',
-                exercises: 14,
-                id: 3
+              name: 'State of a component',
+              exercises: 14,
+              id: 3
             },
             {
-                name: 'Redux',
-                exercises: 11,
-                id: 4
+              name: 'Redux',
+              exercises: 11,
+              id: 4
             }
-        ]
-    }
+          ]
+        }, 
+        {
+          name: 'Node.js',
+          id: 2,
+          parts: [
+            {
+              name: 'Routing',
+              exercises: 3,
+              id: 1
+            },
+            {
+              name: 'Middlewares',
+              exercises: 7,
+              id: 2
+            }
+          ]
+        }
+      ]
 
-    return <Course course={course} />
+    return (
+        <>
+            {courses.map((course)=> <Course key={course.id} course={course} />)}
+        </>
+    )
 }
 
 export default App
