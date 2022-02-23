@@ -1,4 +1,4 @@
-const Header = ({ course }) => <h1>{course}</h1>
+const Header = ({ course }) => <h2>{course}</h2>
 
 const Total = ({ sum }) => <b>total of {sum} exercises</b>
 
@@ -10,11 +10,11 @@ const Content = ({ parts }) =>
     </>
 
 const Course = ({course}) => (
-    <>
+    <div>
         <Header course={course.name}/>
         <Content parts={course.parts}/>
         <Total sum={course.parts.reduce((sum,part)=>sum+part.exercises,0)}/>
-    </>
+    </div>
 )
 
 const App = () => {
@@ -64,9 +64,10 @@ const App = () => {
       ]
 
     return (
-        <>
+        <div>
+            <h1>Web development curriculum</h1>
             {courses.map((course)=> <Course key={course.id} course={course} />)}
-        </>
+        </div>
     )
 }
 
