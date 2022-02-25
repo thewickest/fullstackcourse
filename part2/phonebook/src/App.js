@@ -12,7 +12,15 @@ const App = () => {
 
   const saveName = (event) => {
     event.preventDefault()
-    if(newName!='') setPersons(persons.concat({name:newName}))
+    var isThere = persons.reduce(
+      (isThere,person)=> isThere || person.name == newName,false)
+
+    if(isThere){
+      window.alert(`${newName} is already added to the phonebook`)
+    }
+    else{
+      if(newName!='') setPersons(persons.concat({name:newName}))
+    }
     setNewName('')
   }
 
