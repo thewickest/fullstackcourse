@@ -21,15 +21,15 @@ const App = () => {
   const savePerson = (event) => {
     event.preventDefault()
     var isThere = search.reduce(
-      (isThere,person)=> isThere || person.name == newName,false)
+      (isThere,person)=> isThere || person.name.toLowerCase() == newName.toLowerCase(),false)
 
     if(isThere){
       window.alert(`${newName} is already added to the phonebook`)
     }
     else{
       if(newName!='') {
-        setPersons(search.concat({name:newName,number:newNumber}))
-        setSearch(search.concat({name:newName,number:newNumber}))
+        setPersons(persons.concat({name:newName,number:newNumber,id:persons.length+1}))
+        setSearch(persons.concat({name:newName,number:newNumber,id:persons.length+1}))
       }
       
     }
@@ -38,20 +38,9 @@ const App = () => {
   }
 
   const filterPerson = (event) => {
-
-    var newmap = persons.map(
-      function (person) {
-        console.log(person.name)
-        console.log(event.target.value)
-        console.log("--------")
-        if (person.name.includes(event.target.value)) {
-          return person
-        }else{
-          return {name:'',number:''}
-        }
-      })
+    var newmap = persons.filter(
+      (person)=>person.name.toLocaleLowerCase().includes(event.target.value.toLowerCase()))
     setSearch(newmap)
-    console.log(newmap)
   }
 
   const handleNewName = (event) => {
