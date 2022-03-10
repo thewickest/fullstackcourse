@@ -13,7 +13,6 @@ const App=() => {
   },[])
 
   const setCountry=(country)=>{
-    console.log(country)
     setFilter([country])
   }
 

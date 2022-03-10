@@ -20,12 +20,11 @@ const Countries = ({list,handleClick}) =>{
     if(list.length>10){
         return(<p>Too many matches, specify another filter</p>)
     }else if(list.length == 1){
-        const c = list[0]
-        return(<Country c={c}/>)
+        return(<Country c={list[0]}/>)
     }else{
         return(
             list.map((country) =>
-                    <p>{country.name.common}
+                    <p key={country.cca2}>{country.name.common}
                     <button onClick={()=>handleClick(country)}>boton</button>
                     </p>
             )
