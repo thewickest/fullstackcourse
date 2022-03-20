@@ -1,3 +1,5 @@
+import Weather from "./Weather"
+
 const Country = ({c}) =>{
     return (
         <div>
@@ -15,12 +17,17 @@ const Country = ({c}) =>{
     )
 }
 
-const Countries = ({list,handleClick}) =>{
+const Countries = ({list,handleClick,weather}) =>{
 
     if(list.length>10){
         return(<p>Too many matches, specify another filter</p>)
     }else if(list.length == 1){
-        return(<Country c={list[0]}/>)
+        return(
+            <>
+                <Country c={list[0]}/>
+                <Weather weather={weather}/>
+            </>
+        )
     }else{
         return(
             list.map((country) =>
