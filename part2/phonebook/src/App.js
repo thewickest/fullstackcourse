@@ -30,8 +30,11 @@ const App = () => {
     }
     else{
       if(newName!='') {
-        setPersons(persons.concat({name:newName,number:newNumber,id:persons.length+1}))
-        setSearch(persons.concat({name:newName,number:newNumber,id:persons.length+1}))
+        const newPerson = {name:newName,number:newNumber,id:persons.length+1}
+        const url = 'http://localhost:3001/persons'
+        setPersons(persons.concat(newPerson))
+        setSearch(persons.concat(newPerson))
+        axios.post(url,newPerson)
       }
       
     }
