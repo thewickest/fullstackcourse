@@ -12,7 +12,13 @@ const update = (id,newObject)=>{
 }
 
 const create = (newObject)=>{
-    return axios.post(baseUrl,newObject).then(response => response.data)
+    return axios.post(baseUrl,newObject)
+    .then(response => response.data)
 }
 
-export default {getAll, create, update}
+const erase = (id) =>{
+    return axios.delete(`${baseUrl}/${id}`)
+    .then(response => response.data)
+}
+
+export default {getAll, create, update, erase}

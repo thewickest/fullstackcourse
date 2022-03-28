@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './components/Persons'
 import Form from './components/Form'
 import Filter from './components/Filter'
@@ -12,15 +11,18 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
+  /**For getting the people(persons) */
   useEffect(()=>{
     personsService
     .getAll()
     .then(response => {
+      console.log(response)
       setPersons(response) 
       setSearch(response)
     })
   },[])
 
+  /**For saving the person */
   const savePerson = (event) => {
     event.preventDefault()
     var isThere = search.reduce(
@@ -42,18 +44,33 @@ const App = () => {
     setNewNumber('')
   }
 
+  /**For delete one person */
+  const deletePerson = (person) =>{
+    if(window.confirm(`Delete ${person.name}`)){
+      personsService
+      .erase(person.id)
+      .then(response=>{
+        setSearch(search.filter(p => p.id !=person.id))
+        setPersons(persons.filter(p => p.id !=person.id))
+      })
+    }
+  }
+
+  /**Filter each time something it's write on the filter */
   const filterPerson = (event) => {
     var newmap = persons.filter(
       (person)=>person.name.toLocaleLowerCase().includes(event.target.value.toLowerCase()))
     setSearch(newmap)
   }
 
+  /**Add a new name*/
   const handleNewName = (event) => {
     setNewName(event.target.value)
   }
 
+  /**Add a new number */
   const handleNewNumber = (event) => {
-      setNewNumber(event.target.value)
+    setNewNumber(event.target.value)
   }
 
   return (
@@ -66,7 +83,7 @@ const App = () => {
         textNumber="number:" valueNumber={newNumber} onChangeNumber={handleNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons people={search}/>
+      <Persons people={search} handleOnClick={deletePerson}/>
     </div>
   )
 }
