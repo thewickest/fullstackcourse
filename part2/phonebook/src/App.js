@@ -16,7 +16,6 @@ const App = () => {
     personsService
     .getAll()
     .then(response => {
-      console.log(response)
       setPersons(response) 
       setSearch(response)
     })
@@ -29,16 +28,22 @@ const App = () => {
       (isThere,person)=> isThere || person.name.toLowerCase() == newName.toLowerCase(),false)
 
     if(isThere){
-      window.alert(`${newName} is already added to the phonebook`)
-    }
-    else{
+      if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+        const person = search.find(p => p.name.toLocaleLowerCase() == newName.toLocaleLowerCase())
+        const newPerson = {...person, number: newNumber}
+        personsService.update(person.id, newPerson)
+        .then(savedPerson => {
+          setSearch(search.map(p => p.id != person.id ? p : savedPerson))
+          setPersons(persons.map(p => p.id != person.id ? p : savedPerson))
+        })
+      }
+    }else{
       if(newName!='') {
         const newPerson = {name:newName,number:newNumber,id:persons.length+1}
         setPersons(persons.concat(newPerson))
         setSearch(persons.concat(newPerson))
         personsService.create(newPerson)
-      }
-      
+      } 
     }
     setNewName('')
     setNewNumber('')
@@ -50,6 +55,7 @@ const App = () => {
       personsService
       .erase(person.id)
       .then(response=>{
+        console.log(response)
         setSearch(search.filter(p => p.id !=person.id))
         setPersons(persons.filter(p => p.id !=person.id))
       })
