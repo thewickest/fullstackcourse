@@ -3,6 +3,7 @@ import Persons from './components/Persons'
 import Form from './components/Form'
 import Filter from './components/Filter'
 import personsService from './services/service'
+import Notification from './components/Notification'
 
 const App = () => {
 
@@ -10,6 +11,7 @@ const App = () => {
   const [search, setSearch] = useState(persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [message, setMessage] = useState(null)
 
   /**For getting the people(persons) */
   useEffect(()=>{
@@ -35,14 +37,38 @@ const App = () => {
         .then(savedPerson => {
           setSearch(search.map(p => p.id != person.id ? p : savedPerson))
           setPersons(persons.map(p => p.id != person.id ? p : savedPerson))
+          setMessage({message:`${newName} updated`,isError:false})
+          setTimeout(() => {setMessage(null)},5000)
+        })
+        .catch(error=>{
+          setMessage({
+            message:`Information of ${person.name} has already been removed from server`,
+            isError:true
+          })
+          setTimeout(() => {setMessage(null)},5000)
+          setSearch(search.filter(p => p.id !=person.id))
+          setPersons(persons.filter(p => p.id !=person.id))
         })
       }
     }else{
       if(newName!='') {
         const newPerson = {name:newName,number:newNumber,id:persons.length+1}
-        setPersons(persons.concat(newPerson))
-        setSearch(persons.concat(newPerson))
         personsService.create(newPerson)
+        .then(savedPerson=>{
+          setPersons(persons.concat(savedPerson))
+          setSearch(persons.concat(savedPerson))
+          setMessage({message:`${newName} created`,isError:false})
+          setTimeout(() => {setMessage(null)},5000)
+        })
+        .catch(error=>{
+          setMessage({
+            message:`Information of ${newPerson.name} has already been removed from server`,
+            isError:true
+          })
+          setTimeout(() => {setMessage(null)},5000)
+          setSearch(search.filter(p => p.id !=newPerson.id))
+          setPersons(persons.filter(p => p.id !=newPerson.id))
+        })
       } 
     }
     setNewName('')
@@ -55,7 +81,15 @@ const App = () => {
       personsService
       .erase(person.id)
       .then(response=>{
-        console.log(response)
+        setSearch(search.filter(p => p.id !=person.id))
+        setPersons(persons.filter(p => p.id !=person.id))
+      })
+      .catch(error=>{
+        setMessage({
+          message:`Information of ${person.name} has already been removed from server`,
+          isError:true
+        })
+        setTimeout(() => {setMessage(null)},5000)
         setSearch(search.filter(p => p.id !=person.id))
         setPersons(persons.filter(p => p.id !=person.id))
       })
@@ -82,6 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter onChange={filterPerson}/>
       <h2>Add a new</h2>
       <Form onSubmit={savePerson}
