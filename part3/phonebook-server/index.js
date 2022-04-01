@@ -59,10 +59,15 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    console.log(body)
     if (!body.name || !body.number) {
         return response.status(400).json({
             error: 'content missing'
+        })
+    }
+
+    if(persons.find(person => body.name == person.name)){
+        return response.status(400).json({
+            error: 'name must be unique'
         })
     }
 
@@ -78,6 +83,6 @@ app.post('/api/persons', (request, response) => {
 })
 
 const PORT = 3001
-app.listen(PORT, () => {
+app.listen(PORT, ( ) => {
     console.log(`Server running in port...${PORT}`)
 })
