@@ -1,1 +1,1 @@
-https://floating-sands-79549.herokuapp.com/api/persons
+https://floating-sands-79549.herokuapp.com
