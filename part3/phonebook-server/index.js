@@ -47,7 +47,7 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     response.send(
-        `<p>Phonebook has info por ${Person.count} people</p>`
+        `<p>Phonebook has info for ${Person.count} people</p>`
         + `<p>${new Date()}</p>`
     )
 })
@@ -56,10 +56,8 @@ app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
     Person.findById(id)
         .then(person => {
-            console.log(`${person.name} added`)
             response.json(person)
         })
-        //.catch(response => response.status(404).json({ error: 'resource not found' }))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -93,6 +91,7 @@ app.post('/api/persons', (request, response) => {
     })
 
     person.save().then(savedPerson =>{
+        console.log(`${person.name} added`)
         response.json(savedPerson)
     })
 })
