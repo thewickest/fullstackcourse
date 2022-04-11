@@ -60,12 +60,15 @@ app.get('/api/persons/:id', (request, response) => {
         })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
     Person.findOneAndRemove(id)
         .then(personRemoved => {
             console.log(`${personRemoved.name} removed from dataBase`)
-            response.json(personRemoved)
+            response.status(204).end()
+        })
+        .catch(error =>{
+            next(error)
         })
 })
 
