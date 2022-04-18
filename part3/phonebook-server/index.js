@@ -67,9 +67,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
             console.log(`${personRemoved.name} removed from dataBase`)
             response.status(204).end()
         })
-        .catch(error =>{
-            next(error)
-        })
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
