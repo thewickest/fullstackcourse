@@ -16,7 +16,7 @@ app.use(morgan(
     {skip: (req, res) => req.method != 'POST'}
 ))
 
-let persons = [
+/*let persons = [
     {
         "id": 1,
         "name": "Arto Hellas",
@@ -37,7 +37,7 @@ let persons = [
         "name": "Mary Poppendieck",
         "number": "39-23-6423122"
     }
-]
+]*/
 
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons =>{
@@ -62,15 +62,17 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
-    Person.findOneAndRemove(id)
+    Person.findByIdAndRemove(id)
         .then(personRemoved => {
+            console.log('Id para borrar:',id)
+            console.log('Persona borrada:',personRemoved)
             console.log(`${personRemoved.name} removed from dataBase`)
             response.status(204).end()
         })
         .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
 
     if (!body.name || !body.number) {
@@ -78,24 +80,31 @@ app.post('/api/persons', (request, response) => {
             error: 'content missing'
         })
     }
-    /*
-    if (persons.find(person => body.name == person.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }*/
 
     const person = new Person({
-        id: Math.floor(Math.random() * 1000),
         name: body.name,
         number: body.number
     })
 
-    person.save().then(savedPerson =>{
-        console.log(`${person.name} added`)
-        response.json(savedPerson)
-    })
+    person.save()
+        .then(savedPerson => response.json(savedPerson))
+        .catch(error => next(error))
 })
+
+app.put('/api/persons/:id',(request, response, next) => {
+    Person.findOneAndUpdate({name: request.body.name}, {number: request.body.number})
+        .then(updatedPerson => {
+            response.json({name: updatedPerson.name, number: request.body.number})
+        })
+        .catch(error => next(error))
+
+})
+
+/**Processing errors */
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
