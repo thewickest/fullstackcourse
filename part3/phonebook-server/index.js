@@ -40,8 +40,11 @@ app.use(morgan(
 ]*/
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons =>{
-        response.json(persons)
+    Person.countDocuments({},function (err, count) {
+        response.send(
+            `<p>Phonebook has info for ${count} people</p>`
+            + `<p>${new Date()}</p>`
+        )
     })
 })
 
