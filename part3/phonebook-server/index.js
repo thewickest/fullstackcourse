@@ -71,7 +71,7 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id',(request, response, next) => {
-    Person.findOneAndUpdate({name: request.body.name}, {number: request.body.number})
+    Person.findOneAndUpdate({name: request.body.name}, {number: request.body.number},{runValidators: true})
         .then(updatedPerson => {
             response.json({name: updatedPerson.name, number: request.body.number})
         })
