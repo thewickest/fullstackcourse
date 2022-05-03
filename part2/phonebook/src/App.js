@@ -55,6 +55,7 @@ const App = () => {
         const newPerson = {name:newName,number:newNumber,id:persons.length+1}
         personsService.create(newPerson)
         .then(savedPerson=>{
+          console.log('No he tenido errores')
           setPersons(persons.concat(savedPerson))
           setSearch(persons.concat(savedPerson))
           setMessage({message:`${newName} created`,isError:false})
@@ -62,7 +63,7 @@ const App = () => {
         })
         .catch(error=>{
           setMessage({
-            message:`Information of ${newPerson.name} has already been removed from server`,
+            message: error.response.data.error,
             isError:true
           })
           setTimeout(() => {setMessage(null)},5000)
