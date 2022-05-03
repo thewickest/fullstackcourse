@@ -9,7 +9,7 @@ if (args.length < 3) {
     process.exit(1)
 }
 
-const url = 
+const url =
     `mongodb+srv://graubuntu:${password}@cluster0.yttzt.mongodb.net/phoneBookDB?retryWrites=true&w=majority`
 
 mongoose.connect(url)
@@ -21,8 +21,8 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person',personSchema)
 
-if(args.length==3){
-    Person.find({}).then(result =>{
+if(args.length===3){
+    Person.find({}).then(result => {
         result.forEach(person => {
             console.log(`${person.name} ${person.number}`)
         })
@@ -33,7 +33,7 @@ if(args.length==3){
         name: args[3],
         number: args[4]
     })
-    person.save().then(result =>{
+    person.save().then(result => {
         console.log(`added ${result.name} number ${result.number} to phonebook`)
         mongoose.connection.close()
     })

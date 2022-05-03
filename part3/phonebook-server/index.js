@@ -13,11 +13,11 @@ app.use(express.static('build'))
 morgan.token('body', (res, req) => `${JSON.stringify(res.body)}`)
 app.use(morgan(
     ':method :url :status :res[content-length] - :response-time ms :body',
-    {skip: (req, res) => req.method != 'POST'}
+    { skip: (req, res) => req.method !== 'POST' }
 ))
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons =>{
+    Person.find({}).then(persons => {
         response.json(persons)
     })
 })
@@ -71,9 +71,9 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id',(request, response, next) => {
-    Person.findOneAndUpdate({name: request.body.name}, {number: request.body.number},{runValidators: true})
+    Person.findOneAndUpdate( { name: request.body.name }, { number: request.body.number },{ runValidators: true })
         .then(updatedPerson => {
-            response.json({name: updatedPerson.name, number: request.body.number})
+            response.json({ name: updatedPerson.name, number: request.body.number })
         })
         .catch(error => next(error))
 
@@ -89,7 +89,7 @@ const errorHandler = (error, request, response, next) => {
     console.log(error.message)
 
     if(error.name === 'CastError'){
-        return response.status(400).send({error: 'malformatted id'})
+        return response.status(400).send({ error: 'malformatted id' })
     } else if(error.name === 'ValidationError'){
         return response.status(400).json({ error: error.message })
     }
