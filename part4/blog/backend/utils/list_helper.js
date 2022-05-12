@@ -36,6 +36,11 @@ const mostLikes = (blogs) => {
     }
 }
 
+const firstBlog = (blogs) => {
+    if(blogs.length ===0) return {}
+    else return lodash.first(blogs)
+}
+
 module.exports = {
-    dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
+    dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes, firstBlog
 }
