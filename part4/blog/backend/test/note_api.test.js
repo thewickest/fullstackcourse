@@ -53,6 +53,25 @@ describe('api tests', () => {
         expect(contents).toContain('test')
         
     })
+
+    test('POST: Correct likes field', async () => {
+        const newBlog = {
+            title: 'test',
+            author: 'test',
+            url: 'test'
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        
+        const savedBlog = await helper.blogByTitle('test')
+        expect(savedBlog.likes).toBeDefined()
+        expect(savedBlog.likes).toEqual(0)
+        
+        
+    })
 })
 
 /**AFTER TESTS */

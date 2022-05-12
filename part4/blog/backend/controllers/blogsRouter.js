@@ -8,7 +8,7 @@ blogRouter.get('/', async (request, response) => {
   
 blogRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
-
+  if(blog.likes === undefined) blog.likes = 0 
   const blogSaved = await blog.save()
   response.status(201).json(blogSaved)
 })
