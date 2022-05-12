@@ -32,6 +32,27 @@ describe('api tests', () => {
         expect(fBlog.id).toBeDefined()
         
     })
+
+    test('POST: Correct insert', async () => {
+        const newBlog = {
+            title: 'test',
+            author: 'test',
+            url: 'test',
+            likes: 0
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+        
+        const totalBlogs = await helper.blogsInDb()
+        expect(totalBlogs).toHaveLength(helper.initialBlogs.length+1)
+
+        const contents = totalBlogs.map(b => b.title)
+        expect(contents).toContain('test')
+        
+    })
 })
 
 /**AFTER TESTS */
