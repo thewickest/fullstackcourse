@@ -10,9 +10,10 @@
     "nodemon": "^2.0.15"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "lint": "eslint .",
+    "test": "NODE_ENV=test jest --verbose --runInBand --forceExit"
   },
   "author": "Alex Grau",
   "license": "ISC",
