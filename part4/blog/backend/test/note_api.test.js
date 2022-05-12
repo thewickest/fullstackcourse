@@ -72,6 +72,18 @@ describe('api tests', () => {
         
         
     })
+
+    test('POST: Error title and url', async () => {
+        const newBlog = {
+            author: 'test',
+            likes: 5
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+    })
 })
 
 /**AFTER TESTS */
