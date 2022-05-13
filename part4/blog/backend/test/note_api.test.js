@@ -86,7 +86,7 @@ describe('api tests', () => {
     })
 
     test('DELETE: single blogs', async () => {
-        let blogs = await helper.blogsInDb()
+        const blogs = await helper.blogsInDb()
         const blogToDelete = blogs[0]
 
         await api.delete(`/api/blogs/${blogToDelete.id}`)
@@ -98,6 +98,20 @@ describe('api tests', () => {
 
         const contents = blogsUpdated.map(r => r.title)
         expect(contents).not.toContain(blogToDelete.title)
+
+    })
+
+    test('PUT: update blogs', async () => {
+        const blogs = await helper.blogsInDb()
+        const blogToUpdate = blogs[0]
+
+        const updatedBlog = {...blogToUpdate, likes: 400}
+        const res = await api.put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updatedBlog)
+            .expect(200)
+
+        const blogsUpdated = await helper.blogsInDb()
+        expect(blogsUpdated).toContainEqual(updatedBlog)
 
     })
 })
