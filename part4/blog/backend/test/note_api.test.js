@@ -84,6 +84,22 @@ describe('api tests', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
     })
+
+    test('DELETE: single blogs', async () => {
+        let blogs = await helper.blogsInDb()
+        const blogToDelete = blogs[0]
+
+        await api.delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+
+        /**Retrieve again */
+        const blogsUpdated = await helper.blogsInDb()
+        expect(blogsUpdated).toHaveLength(helper.initialBlogs.length - 1)
+
+        const contents = blogsUpdated.map(r => r.title)
+        expect(contents).not.toContain(blogToDelete.title)
+
+    })
 })
 
 /**AFTER TESTS */
