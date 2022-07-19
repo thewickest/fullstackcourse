@@ -1,18 +1,32 @@
 const blogRouter = require('express').Router()
+const User = require('../models/user')
 const Blog = require('../models/blog')
+const helper = require('../utils/list_helper')
 
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({}).populate('user')
   response.json(blogs)
 })
   
 blogRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)
-  if(blog.likes === undefined) blog.likes = 0
-  if(blog.title === undefined || blog.url === undefined){
+  const user = helper.firstUser(await User.find({}))
+  const {title, author, url, likes}= new Blog(request.body)
+  if(likes === undefined) likes = 0
+  if(title === undefined || url === undefined){
     response.status(400).json({error:"bad request"})
   }else{
+    const blog = new Blog({
+      title: title,
+      author: author,
+      url: url,
+      likes: likes,
+      user: user._id
+
+    })
     const blogSaved = await blog.save()
+    user.blogs = user.blogs.concat(blogSaved._id)
+    await user.save()
     response.status(201).json(blogSaved)
   }
 })
