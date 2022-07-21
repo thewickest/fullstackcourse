@@ -5,17 +5,20 @@ const firstBlog = require('../utils/list_helper').firstBlog
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware')
 
 /**BEFORE TESTS */
 beforeEach(async () => {
+    /**Inital Blogs */
     await Blog.deleteMany({})
-
     const blogs = helper.initialBlogs
         .map(blog => new Blog(blog))
     const promiseBlogs = blogs.map(blog => blog.save())
     await Promise.all(promiseBlogs)
 })
 
+const token = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXgxIiwiaWQiOiI2MmQ5MzNiNmY1MmFmMzRiN2FkODEyYTUiLCJpYXQiOjE2NTg0MDE3NTAsImV4cCI6MTY1ODQwNTM1MH0.d7GNzMa--A19iurUFJR6nbRbmLDLzSdFgHLvNGaCFnY'
 
 /** TESTS*/
 describe('api tests', () => {
@@ -42,6 +45,7 @@ describe('api tests', () => {
         }
 
         await api.post('/api/blogs')
+            .set('Authorization',token)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -62,6 +66,7 @@ describe('api tests', () => {
         }
 
         await api.post('/api/blogs')
+            .set('Authorization',token)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -80,8 +85,22 @@ describe('api tests', () => {
         }
 
         await api.post('/api/blogs')
+            .set('Authorization',token)
             .send(newBlog)
             .expect(400)
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('POST: Bad token', async () => {
+        const newBlog = {
+            author: 'test',
+            likes: 5
+        }
+
+        await api.post('/api/blogs')
+            .set('Authorization','bearer 0123')
+            .send(newBlog)
+            .expect(401)
             .expect('Content-Type', /application\/json/)
     })
 
@@ -90,6 +109,7 @@ describe('api tests', () => {
         const blogToDelete = blogs[0]
 
         await api.delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization',token)
             .expect(204)
 
         /**Retrieve again */

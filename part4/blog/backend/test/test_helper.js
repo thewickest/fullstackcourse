@@ -6,26 +6,23 @@ const initialBlogs = [
         title: 'First Blog',
         author: 'Me',
         url: 'www.dumb.com',
-        likes: 10
+        likes: 10,
+        user: '62d933b6f52af34b7ad812a5'
     },
     {
         title: 'Second Blog',
         author: 'Not me',
         url: 'www.people.com',
-        likes: 15
+        likes: 15,
+        user: '62d933b6f52af34b7ad812a5' //User id de alex1
     }
 ]
 
 const initialUsers = [
     {
-        username: 'First User',
-        name: 'Alex',
-        passwordHash: 'pass'
-    },
-    {
-        username: 'Second User',
-        name: 'pepe',
-        passwordHash: 'pep-pas'
+        username: 'alex1',
+        name: 'alex',
+        passwordHash: 'alex'
     }
 ]
 

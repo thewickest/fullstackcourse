@@ -1,5 +1,8 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -7,13 +10,15 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', userExtractor, async (request, response) => {
 
   const user = request.user
-  const {title, author, url, likes}= new Blog(request.body)
+  let {title, author, url, likes}= new Blog(request.body)
   if(likes === undefined) likes = 0
   if(title === undefined || url === undefined){
     response.status(400).json({error:"bad request"})
+  }if(user === null){
+    response.status(401).json({error:"Unauthorized"})
   }else{
     const blog = new Blog({
       title: title,
@@ -30,7 +35,7 @@ blogRouter.post('/', async (request, response) => {
   }
 })
 
-blogRouter.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', userExtractor, async (request, response) => {
 
   const user = request.user
   const blog = await Blog.findById(request.params.id)
